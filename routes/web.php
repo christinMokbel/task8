@@ -16,12 +16,17 @@ use App\Http\Controllers\Controller;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('index',[Controller::class,'index'])->middleware('verified')->name('index');
-Route::get('about',[Controller::class,'about'])->name('about');
-Route::get('services',[Controller::class,'services'])->name('services');
-Route::get('guards',[Controller::class,'guards'])->name('guards');
-Route::get('contact',[Controller::class,'contact'])->middleware('verified')->name('contact');
+Route::group(
+    [
+        'prefix' => LaravelLocalization::setLocale(),
+        'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ]
+    ], function(){
+               Route::get('index',[Controller::class,'index'])->middleware('verified')->name('index');
+               Route::get('about',[Controller::class,'about'])->name('about');
+               Route::get('services',[Controller::class,'services'])->name('services');
+               Route::get('guards',[Controller::class,'guards'])->name('guards');
+               Route::get('contact',[Controller::class,'contact'])->middleware('verified')->name('contact');
+            });
 
 
 // Auth::routes();
